@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using WASDK = Microsoft.WindowsAppSDK;
 
 using WinUI_test.Activation;
 using WinUI_test.Contracts.Services;
@@ -22,6 +25,35 @@ public partial class App : Application
     // https://docs.microsoft.com/dotnet/core/extensions/dependency-injection
     // https://docs.microsoft.com/dotnet/core/extensions/configuration
     // https://docs.microsoft.com/dotnet/core/extensions/logging
+
+
+    public static string WinAppSdkDetails
+    {
+        // TODO: restore patch number and version tag when WinAppSDK supports them both
+        get => string.Format("Windows App SDK {0}.{1}",
+            WASDK.Release.Major, WASDK.Release.Minor);
+    }
+
+    public static string WinAppSdkRuntimeDetails
+    {
+        get
+        {
+            try
+            {
+                // Retrieve Windows App Runtime version info dynamically
+                var windowsAppRuntimeVersion =
+                    from module in Process.GetCurrentProcess().Modules.OfType<ProcessModule>()
+                    where module.FileName.EndsWith("Microsoft.WindowsAppRuntime.Insights.Resource.dll")
+                    select FileVersionInfo.GetVersionInfo(module.FileName);
+                return WinAppSdkDetails + ", Windows App Runtime " + windowsAppRuntimeVersion.First().FileVersion;
+            }
+            catch
+            {
+                return WinAppSdkDetails + $", Windows App Runtime {WASDK.Runtime.Version.Major}.{WASDK.Runtime.Version.Minor}";
+            }
+        }
+    }
+
     public IHost Host
     {
         get;

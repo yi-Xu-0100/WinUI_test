@@ -198,7 +198,7 @@
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>个性化</value>
   </data>
-  <data name="Settings_Theme.Text" xml:space="preserve">
+  <data name="Settings_Theme.Header" xml:space="preserve">
     <value>主题</value>
   </data>
   <data name="Settings_Theme_Light.Content" xml:space="preserve">
@@ -208,7 +208,7 @@
     <value>深色</value>
   </data>
   <data name="Settings_Theme_Default.Content" xml:space="preserve">
-    <value>默认</value>
+    <value>跟随系统设置</value>
   </data>
   <data name="Settings_About.Text" xml:space="preserve">
     <value>关于这个应用</value>
@@ -228,5 +228,20 @@
   <data name="Settings_Title.Text" xml:space="preserve">
     <value>设置</value>
     <comment>SettingPage 的页面标题</comment>
+  </data>
+  <data name="Settings_Language.Header" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Settings_Language_Description.Text" xml:space="preserve">
+    <value>选择显示的语言</value>
+  </data>
+  <data name="Settings_Language_Warnning.Text" xml:space="preserve">
+    <value>修改语言设置后，需要重新启动才能生效。</value>
+  </data>
+  <data name="Settings_Theme.Description" xml:space="preserve">
+    <value>选择应用主题</value>
+  </data>
+  <data name="Settings_Language_Restart_button.Content" xml:space="preserve">
+    <value>重启</value>
   </data>
 </root>

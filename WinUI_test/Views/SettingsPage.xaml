@@ -32,10 +32,10 @@
         </Grid.RowDefinitions>
 
         <TextBlock
+            x:Uid="Settings_Title"
             x:Name="PageHeader"
             Margin="36,24,36,0"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="Settings" />
+            Style="{StaticResource TitleTextBlockStyle}"/>
         <ScrollViewer
             x:Name="contentSV"
             Grid.Row="1"
@@ -45,26 +45,39 @@
             VerticalScrollBarVisibility="Auto"
             VerticalScrollMode="Auto">
             <StackPanel Spacing="{StaticResource SettingsCardSpacing}">
-                <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Appearance &amp; behavior" />
-                <toolkit:SettingsCard Header="App theme" Description="Select which app theme to display.">
+                <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" x:Uid="Settings_Personalization" />
+                <toolkit:SettingsCard x:Uid="Settings_Theme">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE790;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="themeMode" SelectionChanged="themeMode_SelectionChanged">
-                        <ComboBoxItem Content="Light" Tag="Light" />
-                        <ComboBoxItem Content="Dark" Tag="Dark" />
-                        <ComboBoxItem Content="Use system setting" Tag="Default" />
+                        <ComboBoxItem x:Uid="Settings_Theme_Light" Tag="Light" />
+                        <ComboBoxItem x:Uid="Settings_Theme_Dark" Tag="Dark" />
+                        <ComboBoxItem x:Uid="Settings_Theme_Default" Tag="Default" />
                     </ComboBox>
                 </toolkit:SettingsCard>
 
-                <toolkit:SettingsCard Header="App language" Description="Select which app language to display, restart the app when changed.">
+                <toolkit:SettingsCard x:Name="languageModeCard" x:Uid="Settings_Language">
+                    <toolkit:SettingsCard.Description>
+                        <TextBlock>
+                        <Run x:Uid="Settings_Language_Description"/>
+                        </TextBlock>
+                    </toolkit:SettingsCard.Description>
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE774;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <ComboBox x:Name="languageMode" SelectionChanged="languageMode_SelectionChanged">
-                        <ComboBoxItem Content="English" Tag="en-us" />
-                        <ComboBoxItem Content="简体中文" Tag="zh-cn" />
+                        <ComboBoxItem Content="English" Tag="en-US" />
+                        <ComboBoxItem Content="简体中文" Tag="zh-Hans-CN" />
                     </ComboBox>
+                </toolkit:SettingsCard>
+                <toolkit:SettingsCard x:Name="SettingsLanguageWarnningCard" Margin="0,-2,0,4" Visibility="Collapsed" CornerRadius ="0,0,4,4">
+                    <toolkit:SettingsCard.Description>
+                    <TextBlock>
+                    <Run x:Uid="Settings_Language_Warnning" Foreground="Red" FontWeight="Bold"/>
+                    </TextBlock>
+                    </toolkit:SettingsCard.Description>
+                    <Button x:Uid="Settings_Language_Restart_button" Click="RestartButton_Click" MinWidth="120"/>
                 </toolkit:SettingsCard>
 
                 <!--  About  -->

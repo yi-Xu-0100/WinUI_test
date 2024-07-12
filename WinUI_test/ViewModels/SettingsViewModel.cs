@@ -20,6 +20,14 @@ public partial class SettingsViewModel : ObservableRecipient
     [ObservableProperty]
     private ElementTheme _elementTheme;
 
+    private readonly ILanguageSelectorService _languageSelectorService;
+
+    [ObservableProperty]
+    private string _appLanguage;
+
+    [ObservableProperty]
+    private bool _appLanguageChanged;
+
     [ObservableProperty]
     private string _versionDescription;
 
@@ -28,11 +36,18 @@ public partial class SettingsViewModel : ObservableRecipient
         get;
     }
 
-    public SettingsViewModel(IThemeSelectorService themeSelectorService)
+    public ICommand SwitchLanguageCommand
     {
+        get;
+    }
+
+    public SettingsViewModel(IThemeSelectorService themeSelectorService, ILanguageSelectorService languageSelectorService)
+    {
+        _versionDescription = GetVersionDescription();
+
+        // Set SwitchThemeCommand
         _themeSelectorService = themeSelectorService;
         _elementTheme = _themeSelectorService.Theme;
-        _versionDescription = GetVersionDescription();
 
         SwitchThemeCommand = new RelayCommand<ElementTheme>(
             async (param) =>
@@ -41,6 +56,29 @@ public partial class SettingsViewModel : ObservableRecipient
                 {
                     ElementTheme = param;
                     await _themeSelectorService.SetThemeAsync(param);
+                }
+            });
+
+        // Set SwitchLanguageCommand
+        _languageSelectorService = languageSelectorService;
+        _appLanguage = _languageSelectorService.AppLanguage;
+        _appLanguageChanged = _languageSelectorService.AppLanguageChanged;
+
+        SwitchLanguageCommand = new RelayCommand<string>(
+            async (param) =>
+            {
+                if (param is null)
+                {
+                    throw new ArgumentNullException(nameof(param));
+                }
+
+                if (AppLanguage != param)
+                {
+                    AppLanguage = param;
+                    AppLanguageChanged = true;
+                    await _languageSelectorService.SetLanguageAsync(param);
+                    await _languageSelectorService.SetLanguageChangedAsync(AppLanguageChanged);
+                    
                 }
             });
     }

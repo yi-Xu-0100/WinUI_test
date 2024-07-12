@@ -8,6 +8,7 @@ using WinUI_test.Helpers;
 using WinUI_test.ViewModels;
 using WinUI_test.Services;
 using WinUI_test.Contracts.Services;
+using Microsoft.Windows.AppLifecycle;
 
 namespace WinUI_test.Views;
 
@@ -38,8 +39,7 @@ public sealed partial class SettingsPage : Page
     private void OnSettingsPageLoaded(object sender, RoutedEventArgs e)
     {
         // set default theme
-        var currentTheme = ViewModel.ElementTheme;
-        switch (currentTheme)
+        switch (ViewModel.ElementTheme)
         {
             case ElementTheme.Light:
                 themeMode.SelectedIndex = 0;
@@ -52,6 +52,16 @@ public sealed partial class SettingsPage : Page
                 break;
         }
 
+        // set default language
+        switch (ViewModel.AppLanguage)
+        {
+            case "en-US":
+                languageMode.SelectedIndex = 0;
+                break;
+            case "zh-Hans-CN":
+                languageMode.SelectedIndex = 1;
+                break;
+        }
     }
     private void themeMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -79,6 +89,33 @@ public sealed partial class SettingsPage : Page
 
     private void languageMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        try
+        {
+            // change app language
+            var language = ((ComboBoxItem)languageMode.SelectedItem)?.Tag?.ToString();
+            ViewModel.SwitchLanguageCommand.Execute(language);
 
+            // show the warnning card
+            if (ViewModel.AppLanguageChanged)
+            {
+                SettingsLanguageWarnningCard.Visibility = Visibility.Visible;
+                languageModeCard.Margin = new Thickness(0, 0, 0, -4);
+                languageModeCard.CornerRadius = new CornerRadius(4, 4, 0, 0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Parser ElementTheme error: {ex}");
+        }
+    }
+
+    private void soundPageHyperlink_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void RestartButton_Click(object sender, RoutedEventArgs e)
+    {
+        AppInstance.Restart(null);
     }
 }
